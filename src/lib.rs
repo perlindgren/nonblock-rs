@@ -174,6 +174,12 @@ impl<R: AsRawFd + Read> NonBlockingReader<R> {
             }
         }
     }
+
+    /// Returns the underlying fd in current state.
+    ///
+    pub fn as_raw(self) -> RawFd {
+        self.reader.as_raw_fd()
+    }
 }
 
 fn set_blocking(fd: RawFd, blocking: bool) -> io::Result<()> {
