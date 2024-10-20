@@ -175,10 +175,12 @@ impl<R: AsRawFd + Read> NonBlockingReader<R> {
         }
     }
 
-    /// Returns the underlying fd in current state.
-    ///
+    /// Leaks the underlying fd in current state.
+    /// Prevents the original file from being dropped.
     pub fn as_raw(self) -> RawFd {
-        self.reader.as_raw_fd()
+        let rawfd = self.reader.as_raw_fd();
+        core::mem::forget(self);
+        rawfd
     }
 }
 
